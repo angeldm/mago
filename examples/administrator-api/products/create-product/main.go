@@ -1,17 +1,16 @@
 package main
 
 import (
+	"github.com/angeldm/mago/api"
+	products2 "github.com/angeldm/mago/products"
 	"log"
-
-	"github.com/angeldm/mago/pkg/magento2/api"
-	"github.com/angeldm/mago/pkg/magento2/products"
 )
 
 func main() {
 	// initiate storeconfig
 	storeConfig := &api.StoreConfig{
 		Scheme:    "https",
-		HostName:  "magento2.hermsi.localhost",
+		HostName:  "mago.hermsi.localhost",
 		StoreCode: "default",
 	}
 	// initiate bearer payload
@@ -25,7 +24,7 @@ func main() {
 	log.Printf("Obtained client: '%v'", apiClient)
 
 	// define your product
-	product := products.Product{
+	product := products2.Product{
 		Name:           "Spaget-Shirt",
 		Sku:            "spaget1234",
 		Price:          1000,
@@ -35,7 +34,7 @@ func main() {
 	productSaveOptions := true
 
 	// create product on remote
-	mProduct, err := products.CreateOrReplaceProduct(&product, productSaveOptions, apiClient)
+	mProduct, err := products2.CreateOrReplaceProduct(&product, productSaveOptions, apiClient)
 	if err != nil {
 		panic(err)
 	}

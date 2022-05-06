@@ -2,9 +2,9 @@ package configurableproducts
 
 import (
 	"fmt"
+	"github.com/angeldm/mago/api"
 
 	"github.com/angeldm/mago/internal/utils"
-	"github.com/angeldm/mago/pkg/magento2/api"
 )
 
 type MConfigurableProduct struct {

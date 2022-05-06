@@ -1,19 +1,18 @@
 package main
 
 import (
+	"github.com/angeldm/mago/api"
+	attribute2 "github.com/angeldm/mago/products/attribute"
+	attributeset2 "github.com/angeldm/mago/products/attributeset"
 	"log"
 	"strconv"
-
-	"github.com/angeldm/mago/pkg/magento2/api"
-	"github.com/angeldm/mago/pkg/magento2/products/attribute"
-	"github.com/angeldm/mago/pkg/magento2/products/attributeset"
 )
 
 func main() {
 	// initiate storeconfig
 	storeConfig := &api.StoreConfig{
 		Scheme:    "https",
-		HostName:  "magento2.hermsi.localhost",
+		HostName:  "mago.hermsi.localhost",
 		StoreCode: "default",
 	}
 	// initiate bearer payload
@@ -27,7 +26,7 @@ func main() {
 	log.Printf("Obtained client: '%v'", apiClient)
 
 	// define your attribute
-	attr := &attribute.Attribute{
+	attr := &attribute2.Attribute{
 		AttributeCode:        "awors4",
 		FrontendInput:        "select",
 		DefaultFrontendLabel: "aw",
@@ -35,7 +34,7 @@ func main() {
 	}
 
 	// create attribute on remote
-	mAttribute, err := attribute.CreateAttribute(attr, apiClient)
+	mAttribute, err := attribute2.CreateAttribute(attr, apiClient)
 	if err != nil {
 		panic(err)
 	}
@@ -45,7 +44,7 @@ func main() {
 	log.Printf("Detailed attribute: %+v", mAttribute.Attribute)
 
 	// define your atrribute-set
-	set := attributeset.AttributeSet{
+	set := attributeset2.AttributeSet{
 		AttributeSetName: "foos4",
 		SortOrder:        2,
 	}
@@ -54,7 +53,7 @@ func main() {
 	skeletonID := 4
 
 	// create atrribute-set on remote
-	mAttributeSet, err := attributeset.CreateAttributeSet(set, skeletonID, apiClient)
+	mAttributeSet, err := attributeset2.CreateAttributeSet(set, skeletonID, apiClient)
 	if err != nil {
 		panic(err)
 	}

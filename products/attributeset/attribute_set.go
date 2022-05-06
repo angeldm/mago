@@ -1,12 +1,12 @@
 package attributeset
 
 import (
+	"github.com/angeldm/mago"
+	"github.com/angeldm/mago/api"
+	"github.com/angeldm/mago/products/attribute"
 	"strconv"
 
 	"github.com/angeldm/mago/internal/utils"
-	"github.com/angeldm/mago/pkg/magento2"
-	"github.com/angeldm/mago/pkg/magento2/api"
-	"github.com/angeldm/mago/pkg/magento2/products/attribute"
 )
 
 type MAttributeSet struct {
@@ -63,7 +63,7 @@ func GetAttributeSetByName(name string, apiClient *api.Client) (*MAttributeSet, 
 	}
 
 	if len(response.AttributeSets) == 0 {
-		return nil, magento2.ErrNotFound
+		return nil, mago.ErrNotFound
 	}
 
 	mAttributeSet.AttributeSet = &response.AttributeSets[0]

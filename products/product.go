@@ -1,8 +1,8 @@
 package products
 
 import (
+	"github.com/angeldm/mago/api"
 	"github.com/angeldm/mago/internal/utils"
-	"github.com/angeldm/mago/pkg/magento2/api"
 )
 
 const (

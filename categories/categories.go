@@ -2,10 +2,10 @@ package categories
 
 import (
 	"fmt"
+	"github.com/angeldm/mago"
+	"github.com/angeldm/mago/api"
 
 	"github.com/angeldm/mago/internal/utils"
-	"github.com/angeldm/mago/pkg/magento2"
-	"github.com/angeldm/mago/pkg/magento2/api"
 )
 
 type MCategory struct {
@@ -54,7 +54,7 @@ func GetCategoryByName(name string, apiClient *api.Client) (*MCategory, error) {
 	}
 
 	if len(response.Categories) == 0 {
-		return nil, magento2.ErrNotFound
+		return nil, mago.ErrNotFound
 	}
 
 	mC.Category = &response.Categories[0]

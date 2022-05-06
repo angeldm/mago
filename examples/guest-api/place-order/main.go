@@ -1,17 +1,16 @@
 package main
 
 import (
+	"github.com/angeldm/mago/api"
+	cart2 "github.com/angeldm/mago/cart"
 	"log"
-
-	"github.com/angeldm/mago/pkg/magento2/api"
-	"github.com/angeldm/mago/pkg/magento2/cart"
 )
 
 func main() {
 	// initiate storeconfig
 	storeConfig := &api.StoreConfig{
 		Scheme:    "https",
-		HostName:  "magento2.hermsi.localhost",
+		HostName:  "mago.hermsi.localhost",
 		StoreCode: "default",
 	}
 
@@ -20,7 +19,7 @@ func main() {
 	log.Printf("Obtained client: '%+v'", apiClient)
 
 	// create empty card
-	mCart, err := cart.NewGuestCartFromAPIClient(apiClient)
+	mCart, err := cart2.NewGuestCartFromAPIClient(apiClient)
 	if err != nil {
 		panic(err)
 	}
@@ -28,10 +27,10 @@ func main() {
 	log.Printf("Detailed cart: '%+v'", mCart.Cart)
 
 	// initialize items array
-	var products []cart.Item
+	var products []cart2.Item
 
 	// add items to your items array
-	products = append(products, cart.Item{
+	products = append(products, cart2.Item{
 		Sku: "24-MB01",
 		Qty: 1,
 	})
@@ -46,7 +45,7 @@ func main() {
 	log.Printf("Products in cart: '%+v'", mCart.Cart.Items)
 
 	// define shipping address
-	sAddr := &cart.Address{
+	sAddr := &cart2.Address{
 		City:      "FooCity",
 		Company:   "FooCompany",
 		Email:     "foo@bar.de",
@@ -59,7 +58,7 @@ func main() {
 	}
 
 	// define billing address
-	bAddr := &cart.Address{
+	bAddr := &cart2.Address{
 		City:      "FooCity",
 		Company:   "FooCompany",
 		Email:     "foo@bar.de",
@@ -85,7 +84,7 @@ func main() {
 	log.Printf("Chosen carrier: '%+v'", desiredCarrier)
 
 	// define addressinformation-payload for your cart
-	payLoad := &cart.AddressInformation{
+	payLoad := &cart2.AddressInformation{
 		ShippingAddress:      *sAddr,
 		BillingAddress:       *bAddr,
 		ShippingMethodCode:   desiredCarrier.MethodCode,

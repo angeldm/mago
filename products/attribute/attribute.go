@@ -2,10 +2,10 @@ package attribute
 
 import (
 	"fmt"
+	"github.com/angeldm/mago/api"
 	"strings"
 
 	"github.com/angeldm/mago/internal/utils"
-	"github.com/angeldm/mago/pkg/magento2/api"
 )
 
 type MAttribute struct {

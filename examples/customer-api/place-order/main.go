@@ -1,36 +1,35 @@
 package main
 
 import (
+	api2 "github.com/angeldm/mago/api"
+	cart2 "github.com/angeldm/mago/cart"
 	"log"
-
-	"github.com/angeldm/mago/pkg/magento2/api"
-	"github.com/angeldm/mago/pkg/magento2/cart"
 )
 
 func main() {
 	// initiate storeconfig
-	storeConfig := &api.StoreConfig{
+	storeConfig := &api2.StoreConfig{
 		Scheme:    "https",
-		HostName:  "magento2.hermsi.localhost",
+		HostName:  "mago.hermsi.localhost",
 		StoreCode: "default",
 	}
 
 	// initiate login payload
-	authenticationPaylod := api.AuthenticationRequestPayload{
+	authenticationPaylod := api2.AuthenticationRequestPayload{
 		Username: "anonymous@my.m2.tld",
 		Password: "foobar!23",
 	}
 
 	// create a new apiClient
-	authenticationType := api.Customer
-	apiClient, err := api.NewAPIClientFromAuthentication(storeConfig, authenticationPaylod, authenticationType)
+	authenticationType := api2.Customer
+	apiClient, err := api2.NewAPIClientFromAuthentication(storeConfig, authenticationPaylod, authenticationType)
 	if err != nil {
 		panic(err)
 	}
 	log.Printf("Obtained client: '%+v'", apiClient)
 
 	// create empty card
-	mCart, err := cart.NewCustomerCartFromAPIClient(apiClient)
+	mCart, err := cart2.NewCustomerCartFromAPIClient(apiClient)
 	if err != nil {
 		panic(err)
 	}
@@ -38,10 +37,10 @@ func main() {
 	log.Printf("Detailed cart: '%+v'", mCart.Cart)
 
 	// initialize items array
-	var products []cart.Item
+	var products []cart2.Item
 
 	// add items to your items array
-	products = append(products, cart.Item{
+	products = append(products, cart2.Item{
 		Sku: "123456",
 		Qty: 1,
 	})
@@ -56,7 +55,7 @@ func main() {
 	log.Printf("Products in cart: '%+v'", mCart.Cart.Items)
 
 	// define shipping address
-	sAddr := &cart.Address{
+	sAddr := &cart2.Address{
 		City:      "FooCity",
 		Company:   "FooCompany",
 		Email:     "foo@bar.de",
@@ -69,7 +68,7 @@ func main() {
 	}
 
 	// define billing address
-	bAddr := &cart.Address{
+	bAddr := &cart2.Address{
 		City:      "FooCity",
 		Company:   "FooCompany",
 		Email:     "foo@bar.de",
@@ -95,7 +94,7 @@ func main() {
 	log.Printf("Chosen carrier: '%+v'", desiredCarrier)
 
 	// define addressinformation-payload for your cart
-	payLoad := &cart.AddressInformation{
+	payLoad := &cart2.AddressInformation{
 		ShippingAddress:      *sAddr,
 		BillingAddress:       *bAddr,
 		ShippingMethodCode:   desiredCarrier.MethodCode,

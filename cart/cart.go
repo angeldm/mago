@@ -3,12 +3,12 @@ package cart
 import (
 	"errors"
 	"fmt"
+	"github.com/angeldm/mago"
+	"github.com/angeldm/mago/api"
+	orders2 "github.com/angeldm/mago/orders"
 	"strconv"
 
 	"github.com/angeldm/mago/internal/utils"
-	"github.com/angeldm/mago/pkg/magento2"
-	"github.com/angeldm/mago/pkg/magento2/api"
-	"github.com/angeldm/mago/pkg/magento2/orders"
 )
 
 type MCart struct {
@@ -82,7 +82,7 @@ func (cart *MCart) UpdateFromRemote() error {
 	httpClient := cart.APIClient.HTTPClient
 
 	resp, err := httpClient.R().SetResult(cart.Cart).Get(cart.Route)
-	return utils.MayReturnErrorForHTTPResponse(err, resp, "get detailed cart object from magento2-api")
+	return utils.MayReturnErrorForHTTPResponse(err, resp, "get detailed cart object from mago-api")
 }
 
 func (cart *MCart) AddItems(items []Item) error {
@@ -102,7 +102,7 @@ func (cart *MCart) AddItems(items []Item) error {
 		resp, err := httpClient.R().SetBody(payLoad).Post(endpoint)
 
 		err = utils.MayReturnErrorForHTTPResponse(err, resp, fmt.Sprintf("add item '%+v' to cart", item))
-		if err != nil && errors.Is(err, magento2.ErrNotFound) {
+		if err != nil && errors.Is(err, mago.ErrNotFound) {
 			customErr := &ItemNotFoundError{ItemID: item.ItemID}
 			return customErr
 		} else if err != nil {
@@ -159,7 +159,7 @@ func (cart *MCart) EstimatePaymentMethods() ([]PaymentMethod, error) {
 	return *paymentMethods, err
 }
 
-func (cart *MCart) CreateOrder(paymentMethod PaymentMethod) (*orders.MOrder, error) {
+func (cart *MCart) CreateOrder(paymentMethod PaymentMethod) (*orders2.MOrder, error) {
 	endpoint := cart.Route + cartPlaceOrder
 	httpClient := cart.APIClient.HTTPClient
 
@@ -185,9 +185,9 @@ func (cart *MCart) CreateOrder(paymentMethod PaymentMethod) (*orders.MOrder, err
 		return nil, fmt.Errorf("unexpected error while extracting orderID: '%w'", err)
 	}
 
-	return &orders.MOrder{
-		Route: orders.Orders + "/" + orderIDString,
-		Order: &orders.Order{
+	return &orders2.MOrder{
+		Route: orders2.Orders + "/" + orderIDString,
+		Order: &orders2.Order{
 			EntityID: orderIDInt,
 		},
 		APIClient: cart.APIClient,

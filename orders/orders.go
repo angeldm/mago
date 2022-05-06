@@ -1,9 +1,9 @@
 package orders
 
 import (
+	"github.com/angeldm/mago"
+	"github.com/angeldm/mago/api"
 	"github.com/angeldm/mago/internal/utils"
-	"github.com/angeldm/mago/pkg/magento2"
-	"github.com/angeldm/mago/pkg/magento2/api"
 )
 
 type MOrder struct {
@@ -74,7 +74,7 @@ func GetOrderByIncrementID(id string, apiClient *api.Client) (*MOrder, error) {
 	}
 
 	if len(response.Items) == 0 {
-		return nil, magento2.ErrNotFound
+		return nil, mago.ErrNotFound
 	}
 
 	mOrder.Order.EntityID = response.Items[0].EntityID
@@ -96,7 +96,7 @@ func (mo *MOrder) UpdateEntity() error {
 }
 
 func (mo *MOrder) UpdateFromRemote() error {
-	return mo.APIClient.GetRouteAndDecode(mo.Route, mo.Order, "get detailed order object from magento2-api")
+	return mo.APIClient.GetRouteAndDecode(mo.Route, mo.Order, "get detailed order object from mago-api")
 }
 
 func (mo *MOrder) AddComment(comment *StatusHistory) (StatusHistory, error) {

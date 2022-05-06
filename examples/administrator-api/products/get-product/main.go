@@ -1,17 +1,16 @@
 package main
 
 import (
+	"github.com/angeldm/mago/api"
+	"github.com/angeldm/mago/products"
 	"log"
-
-	"github.com/angeldm/mago/pkg/magento2/api"
-	"github.com/angeldm/mago/pkg/magento2/products"
 )
 
 func main() {
 	// initiate storeconfig
 	storeConfig := &api.StoreConfig{
 		Scheme:    "https",
-		HostName:  "magento2.hermsi.localhost",
+		HostName:  "mago.hermsi.localhost",
 		StoreCode: "default",
 	}
 	// initiate bearer payload

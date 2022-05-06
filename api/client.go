@@ -91,7 +91,7 @@ func buildBasicHTTPClient(storeConfig *StoreConfig) *resty.Client {
 	client.SetBaseURL(fullRestRoute)
 	client.SetTLSClientConfig(&tls.Config{InsecureSkipVerify: false})
 	client.SetHeaders(map[string]string{
-		"User-Agent": "go-magento2 (https://github.com/angeldm/mago)",
+		"User-Agent": "go-mago (https://github.com/angeldm/mago)",
 	})
 
 	retryWait := time.Duration(RetryWaitSeconds)

@@ -1,4 +1,4 @@
-package magento2
+package mago
 
 import "errors"
 

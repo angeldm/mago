@@ -2,17 +2,16 @@ package main
 
 import (
 	"fmt"
+	"github.com/angeldm/mago/api"
+	categories2 "github.com/angeldm/mago/categories"
 	"log"
-
-	"github.com/angeldm/mago/pkg/magento2/api"
-	"github.com/angeldm/mago/pkg/magento2/categories"
 )
 
 func main() {
 	// initiate storeconfig
 	storeConfig := &api.StoreConfig{
 		Scheme:    "https",
-		HostName:  "magento2.hermsi.localhost",
+		HostName:  "mago.hermsi.localhost",
 		StoreCode: "default",
 	}
 	// initiate bearer payload
@@ -25,13 +24,13 @@ func main() {
 	}
 	log.Printf("Obtained client: '%v'", apiClient)
 
-	c := &categories.Category{
+	c := &categories2.Category{
 		Name:     "spagetegory",
 		Level:    2,
 		IsActive: true,
 	}
 
-	mC, err := categories.CreateCategory(c, apiClient)
+	mC, err := categories2.CreateCategory(c, apiClient)
 	if err != nil {
 		panic(err)
 	}

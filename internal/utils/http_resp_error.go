@@ -2,9 +2,9 @@ package utils
 
 import (
 	"fmt"
+	"github.com/angeldm/mago"
 	"net/http"
 
-	"github.com/angeldm/mago/pkg/magento2"
 	"github.com/go-resty/resty/v2"
 	"github.com/pkg/errors"
 )
@@ -22,7 +22,7 @@ func MayReturnErrorForHTTPResponse(err error, resp *resty.Response, triedTo stri
 	if err != nil {
 		err = wrapError(err, triedTo)
 	} else if resp.StatusCode() == http.StatusNotFound {
-		err = magento2.ErrNotFound
+		err = mago.ErrNotFound
 	} else if resp.StatusCode() >= http.StatusBadRequest {
 		additional := map[string]interface{}{
 			"statusCode": resp.StatusCode(),

@@ -1,17 +1,16 @@
 package main
 
 import (
+	"github.com/angeldm/mago/api"
+	attribute2 "github.com/angeldm/mago/products/attribute"
 	"log"
-
-	"github.com/angeldm/mago/pkg/magento2/api"
-	"github.com/angeldm/mago/pkg/magento2/products/attribute"
 )
 
 func main() {
 	// initiate storeconfig
 	storeConfig := &api.StoreConfig{
 		Scheme:    "https",
-		HostName:  "magento2.hermsi.localhost",
+		HostName:  "mago.hermsi.localhost",
 		StoreCode: "default",
 	}
 	// initiate bearer payload
@@ -25,7 +24,7 @@ func main() {
 	log.Printf("Obtained client: '%v'", apiClient)
 
 	// define your attribute
-	attr := &attribute.Attribute{
+	attr := &attribute2.Attribute{
 		AttributeCode:        "spagetattr",
 		FrontendInput:        "select",
 		DefaultFrontendLabel: "aw",
@@ -33,12 +32,12 @@ func main() {
 	}
 
 	// create attribute on remote
-	mAttribute, err := attribute.CreateAttribute(attr, apiClient)
+	mAttribute, err := attribute2.CreateAttribute(attr, apiClient)
 	if err != nil {
 		panic(err)
 	}
 
-	optionValue, err := mAttribute.AddOption(attribute.Option{
+	optionValue, err := mAttribute.AddOption(attribute2.Option{
 		Label: "spaget",
 		Value: "spaget",
 	})
