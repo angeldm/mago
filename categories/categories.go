@@ -1,6 +1,7 @@
 package categories
 
 import (
+	"errors"
 	"fmt"
 	"github.com/angeldm/mago"
 	"github.com/angeldm/mago/api"
@@ -55,6 +56,36 @@ func GetCategoryByName(name string, apiClient *api.Client) (*MCategory, error) {
 
 	if len(response.Categories) == 0 {
 		return nil, mago.ErrNotFound
+	}
+
+	mC.Category = &response.Categories[0]
+	mC.Route = fmt.Sprintf("%s/%d", categories, mC.Category.ID)
+
+	err = utils.MayReturnErrorForHTTPResponse(mC.UpdateCategoryFromRemote(), resp, "get detailed category by name from remote")
+
+	return mC, err
+}
+
+func GetCategories(apiClient *api.Client) (*MCategory, error) {
+	mC := &MCategory{
+		Category:  &Category{},
+		Products:  &[]ProductLink{},
+		APIClient: apiClient,
+	}
+	// searchQuery := BuildSearchQuery("name", name, "in")
+	endpoint := categoriesList // + "?" + searchQuery
+	httpClient := apiClient.HTTPClient
+
+	response := &categorySearchQueryResponse{}
+
+	resp, err := httpClient.R().SetResult(response).Get(endpoint)
+	err = utils.MayReturnErrorForHTTPResponse(err, resp, "get category by name from remote")
+	if err != nil {
+		return nil, err
+	}
+
+	if len(response.Categories) == 0 {
+		return nil, errors.New("not found")
 	}
 
 	mC.Category = &response.Categories[0]
