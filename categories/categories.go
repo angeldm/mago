@@ -66,17 +66,12 @@ func GetCategoryByName(name string, apiClient *api.Client) (*MCategory, error) {
 	return mC, err
 }
 
-func GetCategories(apiClient *api.Client) (*MCategory, error) {
-	mC := &MCategory{
-		Category:  &Category{},
-		Products:  &[]ProductLink{},
-		APIClient: apiClient,
-	}
+func GetCategories(rootCategoy string, apiClient *api.Client) ([]Category, error) {
 	// searchQuery := BuildSearchQuery("name", name, "in")
-	endpoint := categoriesList // + "?" + searchQuery
+	endpoint := categories + "?" + "rootCategoryId=" + rootCategoy
 	httpClient := apiClient.HTTPClient
 
-	response := &categorySearchQueryResponse{}
+	response := &categorySearchResponse{}
 
 	resp, err := httpClient.R().SetResult(response).Get(endpoint)
 	err = utils.MayReturnErrorForHTTPResponse(err, resp, "get category by name from remote")
@@ -84,16 +79,51 @@ func GetCategories(apiClient *api.Client) (*MCategory, error) {
 		return nil, err
 	}
 
-	if len(response.Categories) == 0 {
-		return nil, errors.New("not found")
+	// if len(response.Categories) == 0 {
+	// 	return nil, errors.New("not found")
+	// }
+
+	return response.Categories, err
+}
+
+func RemoveCategoriesByParent(parent string, apiClient *api.Client) error {
+	// mC := &MCategory{
+	//	Category:  &Category{},
+	//	Products:  &[]ProductLink{},
+	//	APIClient: apiClient,
+	// }
+	searchQuery := utils.BuildSearchQuery("parent_id", parent, "in")
+	endpoint := categoriesList + "?" + searchQuery
+	httpClient := apiClient.HTTPClient
+
+	response := &categorySearchQueryResponse{}
+
+	resp, err := httpClient.R().SetResult(response).Get(endpoint)
+	err = utils.MayReturnErrorForHTTPResponse(err, resp, "get category by name from remote")
+	if err != nil {
+		return err
 	}
 
-	mC.Category = &response.Categories[0]
-	mC.Route = fmt.Sprintf("%s/%d", categories, mC.Category.ID)
+	if len(response.Categories) == 0 {
+		return errors.New("not found")
+	}
 
-	err = utils.MayReturnErrorForHTTPResponse(mC.UpdateCategoryFromRemote(), resp, "get detailed category by name from remote")
+	endpoint = categories
+	for _, v := range response.Categories {
+		imC := &MCategory{
+			Category:  &v,
+			Products:  &[]ProductLink{},
+			APIClient: apiClient,
+		}
+		imC.Route = fmt.Sprintf("%s/%d", categories, imC.Category.ID)
 
-	return mC, err
+		err := imC.RemoveCategoryFromRemote()
+		if err != nil {
+			return err
+		}
+	}
+
+	return nil
 }
 
 func (mC *MCategory) UpdateCategoryFromRemote() error {
@@ -129,4 +159,12 @@ func (mC *MCategory) AssignProductByProductLink(pl *ProductLink) error {
 	}
 
 	return err
+}
+func (mC *MCategory) RemoveCategoryFromRemote() error {
+	resp, err := mC.APIClient.HTTPClient.R().Delete(mC.Route)
+	err = utils.MayReturnErrorForHTTPResponse(err, resp, "get category from remote")
+	if err != nil {
+		return err
+	}
+	return nil
 }

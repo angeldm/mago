@@ -49,3 +49,8 @@ type categorySearchQueryResponse struct {
 		} `json:"filter_groups"`
 	} `json:"search_criteria"`
 }
+
+type categorySearchResponse struct {
+	Category   Category
+	Categories []Category `json:"children_data"`
+}
