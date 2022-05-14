@@ -19,6 +19,17 @@ type MediaGalleryEntries struct {
 	ExtensionAttributes map[string]interface{} `json:"extension_attributes"`
 }
 
+// ProductAttachments `json:"product_attachments"`
+type ProductAttachments struct {
+	ProductID             int    `json:"product_id,omitempty"`
+	Title                 string `json:"title"`
+	SortOrder             int    `json:"sort_order,omitempty"`
+	AttachmentType        string `json:"attachment_type"`
+	AttachmentFile        string `json:"attachment_file,omitempty"`
+	AttachmentFileContent string `json:"attachment_file_content,omitempty"`
+	AttachmentURL         string `json:"attachment_url,omitempty"`
+}
+
 type TierPrices struct {
 	CustomerGroupID     int                    `json:"customer_group_id"`
 	Qty                 float64                `json:"qty"`
@@ -94,6 +105,12 @@ type Options struct {
 	ImageSizeX          int                    `json:"image_size_x,omitempty"`
 	ImageSizeY          int                    `json:"image_size_y,omitempty"`
 	Values              []Values               `json:"values,omitempty"`
+	ExtensionAttributes map[string]interface{} `json:"extension_attributes,omitempty"`
+}
+
+type CategoryLink struct {
+	Position            int                    `json:"position"`
+	CategoryID          string                 `json:"category_id"`
 	ExtensionAttributes map[string]interface{} `json:"extension_attributes,omitempty"`
 }
 

@@ -38,6 +38,25 @@ func GetProductBySKU(sku string, apiClient *api.Client) (*MProduct, error) {
 	return mProduct, err
 }
 
+func DeleteProductBySKU(sku string, apiClient *api.Client) (*MProduct, error) {
+	mProduct := &MProduct{
+		Route:     products + "/" + sku,
+		Product:   &Product{},
+		APIClient: apiClient,
+	}
+
+	err := mProduct.DeleteFromRemote()
+
+	return mProduct, err
+}
+
+func (mProduct *MProduct) DeleteFromRemote() error {
+	httpClient := mProduct.APIClient.HTTPClient
+
+	resp, err := httpClient.R().Delete(mProduct.Route)
+	return utils.MayReturnErrorForHTTPResponse(err, resp, "get detailed product from remote")
+}
+
 func (mProduct *MProduct) createOrReplaceProduct(saveOptions bool) error {
 	endpoint := products
 	httpClient := mProduct.APIClient.HTTPClient

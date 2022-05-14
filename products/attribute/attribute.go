@@ -73,3 +73,20 @@ func (mas *MAttribute) AddOption(option Option) (string, error) {
 
 	return optionValue, mas.UpdateAttributeFromRemote()
 }
+
+func (mas *MAttribute) DeleteOption(option Option) error {
+	endpoint := mas.Route + "/" + productsAttributeOptions + "/" + option.Value
+	httpClient := mas.APIClient.HTTPClient
+
+	payLoad := addOptionPayload{
+		Option: option,
+	}
+
+	resp, err := httpClient.R().SetBody(payLoad).Delete(endpoint)
+	err = utils.MayReturnErrorForHTTPResponse(err, resp, "assign option to attribute")
+	if err != nil {
+		return err
+	}
+
+	return err
+}
