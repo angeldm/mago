@@ -149,3 +149,14 @@ type updateStockPayload struct {
 }
 
 var ErrNotFound = errors.New("no document found")
+
+type ProductCriteria struct {
+	FilterGroups []interface{} `json:"filter_groups"`
+	CurrentPage  int           `json:"current_page"`
+}
+
+type ProductSearchResponse struct {
+	Items          []Product       `json:"items"`
+	SearchCriteria ProductCriteria `json:"search_criteria"`
+	TotalCount     int             `json:"total_count"`
+}

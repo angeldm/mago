@@ -38,6 +38,39 @@ func GetProductBySKU(sku string, apiClient *api.Client) (*MProduct, error) {
 	return mProduct, err
 }
 
+func GetAllProducts(apiClient *api.Client) ([]*MProduct, error) { // searchQuery := BuildSearchQuery("currentPage", "0", "in")
+	endpoint := products + "?" + "searchCriteria[currentPage]=0"
+	httpClient := apiClient.HTTPClient
+
+	response := &ProductSearchResponse{}
+
+	resp, err := httpClient.R().SetResult(response).Get(endpoint)
+	err = utils.MayReturnErrorForHTTPResponse(err, resp, "get product by name from remote")
+	if err != nil {
+		return nil, err
+	}
+
+	if len(response.Items) == 0 {
+		return nil, nil
+	}
+
+	items := make([]*MProduct, len(response.Items))
+	for k, tr := range response.Items {
+		mProduct := &MProduct{
+			Product:   &Product{},
+			APIClient: apiClient,
+			Route:     products + "/" + tr.Sku,
+		}
+		err := utils.MayReturnErrorForHTTPResponse(mProduct.UpdateProductFromRemote(), resp, "get detailed product by name from remote")
+		if err != nil {
+			return nil, err
+		}
+		items[k] = mProduct
+	}
+
+	return items, err
+}
+
 func DeleteProductBySKU(sku string, apiClient *api.Client) (*MProduct, error) {
 	mProduct := &MProduct{
 		Route:     products + "/" + sku,
