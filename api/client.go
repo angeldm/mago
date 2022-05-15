@@ -87,7 +87,6 @@ func buildBasicHTTPClient(storeConfig *StoreConfig) *resty.Client {
 	restPrefix := "/rest/" + storeConfig.StoreCode
 	fullRestRoute := storeConfig.Scheme + "://" + storeConfig.HostName + restPrefix + apiVersion
 	client := resty.New()
-	//client.SetRESTMode()
 	client.SetBaseURL(fullRestRoute)
 	client.SetTLSClientConfig(&tls.Config{InsecureSkipVerify: false})
 	client.SetHeaders(map[string]string{

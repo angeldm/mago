@@ -67,7 +67,6 @@ func GetCategoryByName(name string, apiClient *api.Client) (*MCategory, error) {
 }
 
 func GetCategories(rootCategoy string, apiClient *api.Client) ([]Category, error) {
-	// searchQuery := BuildSearchQuery("name", name, "in")
 	endpoint := categories + "?" + "rootCategoryId=" + rootCategoy
 	httpClient := apiClient.HTTPClient
 
@@ -87,11 +86,6 @@ func GetCategories(rootCategoy string, apiClient *api.Client) ([]Category, error
 }
 
 func RemoveCategoriesByParent(parent string, apiClient *api.Client) error {
-	// mC := &MCategory{
-	//	Category:  &Category{},
-	//	Products:  &[]ProductLink{},
-	//	APIClient: apiClient,
-	// }
 	searchQuery := utils.BuildSearchQuery("parent_id", parent, "in")
 	endpoint := categoriesList + "?" + searchQuery
 	httpClient := apiClient.HTTPClient
